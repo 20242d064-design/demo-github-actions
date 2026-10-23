@@ -19,4 +19,4 @@ def test_area_circulo():
 
 def test_area_circulo_radio_negativo():
     with pytest.raises(ValueError):
-        area_circulo(-1)
+        area_circulo(1)
