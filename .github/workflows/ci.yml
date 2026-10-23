@@ -1,0 +1,43 @@
+name: CI
+
+# Eventos que disparan el pipeline
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Instalar Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Revisar el estilo del código (flake8)
+        run: flake8 . --max-line-length=100
+
+      - name: Ejecutar las pruebas automáticas (pytest)
+        run: pytest -v
+
+      - name: Preparar el paquete de entrega
+        run: |
+          mkdir dist
+          zip -r dist/app.zip calculos.py README.md
+
+      - name: Guardar el paquete como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: paquete-python-${{ matrix.python-version }}
+          path: dist/app.zip
