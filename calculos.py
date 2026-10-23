@@ -4,7 +4,7 @@ import math
 
 def suma_dos_numeros(a, b):
     """Devuelve la suma de dos números."""
-    return a - b
+    return a + b
 
 
 def potencia(base, exponente):
